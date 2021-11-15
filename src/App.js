@@ -15,6 +15,8 @@ import PrimaryAppBar from "./components/appBar";
 import {Box, Grid} from "@mui/material";
 import ProductCreate from "./pages/product/create";
 import ProductEdit from "./pages/product/edit";
+import ProviderCreate from "./pages/provider/create";
+import ProviderEdit from "./pages/provider/edit";
 
 function App() {
     return (
@@ -27,6 +29,12 @@ function App() {
                             <Switch>
                                 <Route exact path="/providers">
                                     <Provider/>
+                                </Route>
+                                <Route exact path="/provider/create">
+                                    <ProviderCreate/>
+                                </Route>
+                                <Route exact path="/provider/edit/:id">
+                                    <ProviderEdit/>
                                 </Route>
                                 <Route exact path="/product">
                                     <Product/>

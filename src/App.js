@@ -19,6 +19,8 @@ import ProviderCreate from "./pages/provider/create";
 import ProviderEdit from "./pages/provider/edit";
 import StorageCreate from "./pages/storage/create";
 import StorageEdit from "./pages/storage/edit";
+import DetailCreate from "./pages/detail/create";
+import DetailEdit from "./pages/detail/edit";
 
 function App() {
     return (
@@ -61,6 +63,12 @@ function App() {
                                 </Route>
                                 <Route exact path="/detail">
                                     <Detail/>
+                                </Route>
+                                <Route exact path="/detail/create">
+                                    <DetailCreate/>
+                                </Route>
+                                <Route exact path="/detail/edit/:id">
+                                    <DetailEdit/>
                                 </Route>
                             </Switch>
                         </Grid>

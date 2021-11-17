@@ -17,6 +17,8 @@ import ProductCreate from "./pages/product/create";
 import ProductEdit from "./pages/product/edit";
 import ProviderCreate from "./pages/provider/create";
 import ProviderEdit from "./pages/provider/edit";
+import StorageCreate from "./pages/storage/create";
+import StorageEdit from "./pages/storage/edit";
 
 function App() {
     return (
@@ -50,6 +52,12 @@ function App() {
                                 </Route>
                                 <Route path="/storage">
                                     <Storage/>
+                                </Route>
+                                <Route exact path="/storage/create">
+                                    <StorageCreate/>
+                                </Route>
+                                <Route exact path="/storage/edit/:id">
+                                    <StorageEdit/>
                                 </Route>
                                 <Route exact path="/detail">
                                     <Detail/>

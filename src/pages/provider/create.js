@@ -5,20 +5,28 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {useState} from "react";
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+import {useDispatch} from "react-redux";
+import {createProviderAction} from "../../redux/providerDuck";
 
 const theme = createTheme();
 
 function ProviderCreate() {
+    const [value, setValue] = useState(null);
+    const dispatch = useDispatch()
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        console.log({
-            first_name: data.get('firstName'),
-            last_name: data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const dataForm = {
+            name: data.get('name'),
+            direction: data.get('direction'),
+            enrollment_date: value,
+        }
+        dispatch(createProviderAction(dataForm))
     };
 
     return <ThemeProvider theme={theme}>
@@ -36,12 +44,11 @@ function ProviderCreate() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                autoComplete="given-name"
-                                name="firstName"
+                                name="name"
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="First Name"
+                                id="name"
+                                label="Name"
                                 autoFocus
                             />
                         </Grid>
@@ -49,32 +56,23 @@ function ProviderCreate() {
                             <TextField
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="family-name"
+                                id="direction"
+                                label="direccion"
+                                name="direction"
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="new-password"
-                            />
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DatePicker
+                                    label="Basic example"
+                                    value={value}
+                                    name="enrollment_date"
+                                    onChange={(newValue) => {
+                                        setValue(newValue);
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
                         </Grid>
                     </Grid>
                     <Button

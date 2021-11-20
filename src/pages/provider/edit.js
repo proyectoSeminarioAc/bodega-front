@@ -7,24 +7,38 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useParams} from "react-router-dom";
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
+import {useEffect, useState} from "react";
+import {connect, useDispatch} from "react-redux";
+import {fetchProviderAction, updateProviderAction} from "../../redux/providerDuck";
 
 const theme = createTheme();
 
-function ProviderEdit() {
+function ProviderEdit({provider}) {
+    const dispatch = useDispatch()
     const {id} = useParams();
+    const [providerName, setProviderName] = useState()
+    const [providerDirection, setProviderDirection] = useState()
+    useEffect(() => {
+        dispatch(fetchProviderAction(id))
+    }, [])
+
+    useEffect(() => {
+        if (!!provider) {
+            setProviderName(provider.name)
+            setProviderDirection(provider.direction)
+        }
+    }, [provider])
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
-        console.log({
-            code: data.get('code'),
-            last_name: data.get('firstName'),
-            address: data.get('address'),
-            created_at: data.get('created_at'),
-        });
+        const dataForm = {
+            name: data.get('name'),
+            id: id,
+            enrollment_date: provider.enrollment_date,
+            direction: data.get('direction')
+        };
+        dispatch(updateProviderAction(dataForm, id))
     };
 
     return <ThemeProvider theme={theme}>
@@ -45,51 +59,26 @@ function ProviderEdit() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                autoComplete="given-name"
-                                name="Code"
+                                value={providerName}
+                                onChange={(e) => setProviderName(e.target.value)}
+                                name="name"
                                 required
                                 fullWidth
-                                id="Code"
-                                label="First Name"
+                                id="name"
+                                label="Name"
                                 autoFocus
-                                value="Code"
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                value={providerDirection}
+                                onChange={(e) => setProviderDirection(e.target.value)}
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="First Name"
-                                name="firstName"
-                                autoComplete="family-name"
-                                value="firstName"
+                                id="direction"
+                                label="direccion"
+                                name="direction"
                             />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="address"
-                                label="address Address"
-                                name="address"
-                                autoComplete="address"
-                                value="address"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DatePicker
-                                    onChange={(newValue) => {
-                                        console.log(newValue);
-                                    }}
-                                    label="Basic example"
-                                    value={new Date()}
-                                    name='createdAt'
-                                    id="createdAt"
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
-                            </LocalizationProvider>
                         </Grid>
                     </Grid>
                     <Button
@@ -106,4 +95,10 @@ function ProviderEdit() {
     </ThemeProvider>
 }
 
-export default ProviderEdit;
+function mapState(state) {
+    return {
+        provider: state.provider.provider,
+    }
+}
+
+export default connect(mapState)(ProviderEdit);

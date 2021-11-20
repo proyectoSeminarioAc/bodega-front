@@ -8,21 +8,28 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import {useHistory} from "react-router-dom";
+import {connect, useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {deleteProviderAction, getProvidersAction} from "../../redux/providerDuck";
+import Skeleton from '@mui/material/Skeleton';
 
-function createData(id, name, address, created_at) {
-    return {id, name, address, created_at};
-}
-
-const rows = [
-    createData(1, 'Proveedor 1', 'CAlle ajajaj', 24),
-    createData(2, 'Proveedor 2', 'CAlle ajajaj', 37),
-    createData(3, 'Proveedor 3', 'CAlle ajajaj', 6.0),
-    createData(4, 'Proveedor 4', 'CAlle ajajaj', 67),
-    createData(5, 'Proveedor 5', 'CAlle ajajaj', 49),
-];
-
-function Provider() {
+function Provider({providers, deleteStatus, fetching}) {
     const history = useHistory();
+    const dispatch = useDispatch();
+    const skeletonArray = Array(10).fill('');
+
+    useEffect(() => {
+        dispatch(getProvidersAction())
+    }, [])
+
+    useEffect(() => {
+        if (deleteStatus)
+            dispatch(getProvidersAction())
+    }, [deleteStatus])
+
+    const handleDelete = (id) => {
+        dispatch(deleteProviderAction(id))
+    }
     return (
         <>
             <Button onClick={() => history.push('provider/create')} variant="contained">Crear</Button>
@@ -39,7 +46,27 @@ function Provider() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.map((row) => (
+                        {fetching &&
+                        skeletonArray.map((item, index) => (
+                            <TableRow key={index}>
+                                <TableCell component="th" scope="row">
+                                    <Skeleton/>
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    <Skeleton/>
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    <Skeleton/>
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    <Skeleton/>
+                                </TableCell>
+                                <TableCell component="th" scope="row">
+                                    <Skeleton/>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                        {providers && providers.map((row) => (
                             <TableRow
                                 key={row.id}
                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
@@ -48,12 +75,13 @@ function Provider() {
                                     {row.id}
                                 </TableCell>
                                 <TableCell align="right">{row.name}</TableCell>
-                                <TableCell align="right">{row.address}</TableCell>
-                                <TableCell align="right">{row.created_at}</TableCell>
+                                <TableCell align="right">{row.direction}</TableCell>
+                                <TableCell align="right">{row.enrollment_date}</TableCell>
                                 <TableCell align="right">
                                     <ButtonGroup variant="contained" aria-label="outlined primary button group">
-                                        <Button onClick={() => history.push('/provider/edit/1')}>Editar</Button>
-                                        <Button>Eliminar</Button>
+                                        <Button
+                                            onClick={() => history.push('/provider/edit/' + row.id)}>Editar</Button>
+                                        <Button onClick={() => handleDelete(row.id)}>Eliminar</Button>
                                     </ButtonGroup>
                                 </TableCell>
                             </TableRow>
@@ -61,9 +89,16 @@ function Provider() {
                     </TableBody>
                 </Table>
             </TableContainer>
-
         </>
     );
 }
 
-export default Provider;
+function mapState(state) {
+    return {
+        providers: state.provider.providers,
+        deleteStatus: state.provider.deleteStatus,
+        fetching: state.provider.fetching,
+    }
+}
+
+export default connect(mapState)(Provider);

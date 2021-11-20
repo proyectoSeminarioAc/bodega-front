@@ -8,6 +8,9 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import {useHistory} from "react-router-dom";
+import {connect, useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {getProvidersAction} from "../../redux/providerDuck";
 
 function createData(id, name, address, created_at) {
     return {id, name, address, created_at};
@@ -21,8 +24,18 @@ const rows = [
     createData(5, 'Proveedor 5', 'CAlle ajajaj', 49),
 ];
 
-function Provider() {
+function Provider({provider}) {
     const history = useHistory();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getProvidersAction())
+    }, [])
+
+    useEffect(() => {
+        console.log(provider)
+    }, [provider])
+
     return (
         <>
             <Button onClick={() => history.push('provider/create')} variant="contained">Crear</Button>
@@ -66,4 +79,10 @@ function Provider() {
     );
 }
 
-export default Provider;
+function mapState(state) {
+    return {
+        provider: state.categories,
+    }
+}
+
+export default connect(mapState)(Provider);

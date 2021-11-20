@@ -1,9 +1,13 @@
+import {exportHttpClient} from "../utils";
+
 const initialData = {
     fetching: false,
     provider: null,
     providers: [],
     error: null
 }
+
+const httpClient = exportHttpClient();
 
 const FETCHING_PROVIDER = "FETCHING_PROVIDER";
 const FETCHING_PROVIDER_SUCCESS = "FETCHING_PROVIDER_SUCCESS";
@@ -37,4 +41,24 @@ export default function providerReducer(state = initialData, action) {
         default:
             return state;
     }
+}
+
+export const getProvidersAction = () => (dispatch, getState) => {
+    dispatch({
+        type: FETCHING_PROVIDERS
+    });
+
+    httpClient.get('/providers').then(res => {
+        console.log(res)
+        dispatch({
+            type: FETCHING_PROVIDERS_SUCCESS,
+            payload: res
+        })
+    }).catch(err => {
+        console.log(err)
+        dispatch({
+            type: FETCHING_PROVIDERS_ERROR,
+            payload: err
+        })
+    })
 }

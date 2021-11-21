@@ -6,14 +6,14 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {connect, useDispatch} from "react-redux";
 import {fetchProviderAction, updateProviderAction} from "../../redux/providerDuck";
 
 const theme = createTheme();
 
-function ProviderEdit({provider}) {
+function ProviderEdit({provider, updateStatus}) {
     const dispatch = useDispatch()
     const {id} = useParams();
     const [providerName, setProviderName] = useState()
@@ -22,10 +22,15 @@ function ProviderEdit({provider}) {
         dispatch(fetchProviderAction(id))
     }, [])
 
+    const history = useHistory()
+
     useEffect(() => {
         if (!!provider) {
             setProviderName(provider.name)
             setProviderDirection(provider.direction)
+            if (updateStatus) {
+                history.push('/providers')
+            }
         }
     }, [provider])
 
@@ -98,6 +103,7 @@ function ProviderEdit({provider}) {
 function mapState(state) {
     return {
         provider: state.provider.provider,
+        updateStatus: state.provider.updateStatus,
     }
 }
 

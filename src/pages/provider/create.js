@@ -5,16 +5,17 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-import {useDispatch} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {createProviderAction} from "../../redux/providerDuck";
+import {useHistory} from "react-router-dom";
 
 const theme = createTheme();
 
-function ProviderCreate() {
+function ProviderCreate({provider}) {
     const [value, setValue] = useState(null);
     const dispatch = useDispatch()
     const handleSubmit = (event) => {
@@ -28,6 +29,13 @@ function ProviderCreate() {
         }
         dispatch(createProviderAction(dataForm))
     };
+
+    const history = useHistory()
+
+    useEffect(() => {
+        if (!!provider)
+            history.push('/providers')
+    }, [provider])
 
     return <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -89,4 +97,10 @@ function ProviderCreate() {
     </ThemeProvider>
 }
 
-export default ProviderCreate;
+function mapState(state) {
+    return {
+        provider: state.provider.provider,
+    }
+}
+
+export default connect(mapState)(ProviderCreate);

@@ -4,6 +4,7 @@ const initialData = {
     fetching: false,
     provider: null,
     deleteStatus: false,
+    updateStatus: false,
     providers: [],
     error: null
 }
@@ -42,14 +43,17 @@ export default function providerReducer(state = initialData, action) {
                 fetching: true,
                 provider: null,
                 deleteStatus: false,
+                updateStatus: false,
                 providers: [],
                 error: null
             }
 
         case FETCHING_PROVIDER_SUCCESS:
         case CREATING_PROVIDER_SUCCESS:
-        case UPDATING_PROVIDER_SUCCESS:
             return {...state, fetching: false, provider: action.payload}
+
+        case UPDATING_PROVIDER_SUCCESS:
+            return {...state, fetching: false, provider: action.payload, updateStatus: true}
 
         case DELETING_PROVIDER_SUCCESS:
             return {...state, fetching: false, deleteStatus: action.payload}

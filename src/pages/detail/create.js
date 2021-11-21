@@ -8,27 +8,51 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {connect, useDispatch} from "react-redux";
+import {getStoresAction} from "../../redux/storeDuck";
+import {getProductsAction} from "../../redux/productDuck";
+import {createDetailAction} from "../../redux/detailtDuck";
 
 const theme = createTheme();
 
-function DetailCreate() {
-    const [age, setAge] = useState('');
+function DetailCreate({stores, products}) {
+    const [productId, setProductId] = useState(0);
+    const [storageId, setStorageId] = useState(0);
+    const [quantityForm, setQuantityForm] = useState(0);
+    const [amountForm, setAmountForm] = useState(0);
+    const [amountTotalForm, setAmountTotalForm] = useState(0);
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
+    const handleChangeStorage = (event) => {
+        setStorageId(event.target.value);
     };
+
+    const handleChangeProduct = (event) => {
+        setProductId(event.target.value);
+    };
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getStoresAction())
+        dispatch(getProductsAction())
+    }, [])
+
+    useEffect(() => {
+        setAmountTotalForm(quantityForm * amountForm)
+    }, [quantityForm, amountForm])
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        const dataForm = {
+            store_id: storageId,
+            product_id: productId,
+            amount: data.get('unitValue'),
+            quantity: data.get('quantity'),
+            amount_total: amountTotalForm,
+        }
 
-        console.log({
-            first_name: data.get('firstName'),
-            last_name: data.get('quantity'),
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        dispatch(createDetailAction(dataForm))
     };
 
     return <ThemeProvider theme={theme}>
@@ -49,13 +73,13 @@ function DetailCreate() {
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={age}
+                                value={storageId}
                                 label="Age"
-                                onChange={handleChange}
+                                onChange={handleChangeStorage}
                             >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {
+                                    stores.map(({id, name}) => <MenuItem value={id}>{name}</MenuItem>)
+                                }
                             </Select>
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -63,17 +87,19 @@ function DetailCreate() {
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={age}
+                                value={productId}
                                 label="Age"
-                                onChange={handleChange}
+                                onChange={handleChangeProduct}
                             >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {
+                                    products.map(({id, name}) => <MenuItem value={id}>{name}</MenuItem>)
+                                }
                             </Select>
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                value={quantityForm}
+                                onChange={(e) => setQuantityForm(e.target.value)}
                                 required
                                 fullWidth
                                 type="number"
@@ -84,6 +110,8 @@ function DetailCreate() {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                value={amountForm}
+                                onChange={(e) => setAmountForm(e.target.value)}
                                 required
                                 fullWidth
                                 type="number"
@@ -94,6 +122,7 @@ function DetailCreate() {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                value={amountTotalForm}
                                 required
                                 fullWidth
                                 disabled={true}
@@ -118,4 +147,12 @@ function DetailCreate() {
     </ThemeProvider>
 }
 
-export default DetailCreate;
+
+function mapState(state) {
+    return {
+        stores: state.store.stores,
+        products: state.product.products,
+    }
+}
+
+export default connect(mapState)(DetailCreate);

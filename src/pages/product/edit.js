@@ -9,22 +9,47 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
+import {connect, useDispatch} from "react-redux";
+import {useEffect, useState} from "react";
+import {fetchProviderAction, updateProviderAction} from "../../redux/providerDuck";
+import {fetchProductAction, updateProductAction} from "../../redux/productDuck";
 
 const theme = createTheme();
 
-function ProductEdit() {
+function ProductEdit({product, updateStatus}) {
+    const dispatch = useDispatch()
     const {id} = useParams();
+    const [productName, setProductName] = useState()
+    const [productDescription, setProductDescription] = useState()
+
+    useEffect(() => {
+        dispatch(fetchProductAction(id))
+    }, [])
+
+
+    const history = useHistory()
+
+    useEffect(() => {
+        if (!!product) {
+            setProductName(product.name)
+            setProductDescription(product.description)
+            if (updateStatus) {
+                history.push('/product')
+            }
+        }
+    }, [product])
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
-        console.log({
-            first_name: data.get('firstName'),
-            last_name: data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const dataForm = {
+            id,
+            name: data.get('name'),
+            description: data.get('description'),
+            alternate_reference: product.alternate_reference
+        };
+        dispatch(updateProductAction(dataForm, id))
     };
 
     return <ThemeProvider theme={theme}>
@@ -45,48 +70,23 @@ function ProductEdit() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                autoComplete="given-name"
-                                name="firstName"
+                                name="name"
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="First Name"
+                                id="name"
+                                label="Nombre"
                                 autoFocus
-                                value="firstName"
+                                value={productName}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="family-name"
-                                value="lastName"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                                value="email"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="new-password"
-                                value="password"
+                                id="description"
+                                label="Descripcion"
+                                name="description"
+                                value={productDescription}
                             />
                         </Grid>
                     </Grid>
@@ -104,4 +104,12 @@ function ProductEdit() {
     </ThemeProvider>
 }
 
-export default ProductEdit;
+
+function mapState(state) {
+    return {
+        product: state.product.product,
+        updateStatus: state.product.updateStatus,
+    }
+}
+
+export default connect(mapState)(ProductEdit);

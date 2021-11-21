@@ -1,29 +1,36 @@
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {createProductAction} from "../../redux/productDuck";
+import {connect, useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {useHistory} from "react-router-dom";
 
 const theme = createTheme();
 
-function ProductCreate() {
+function ProductCreate({product}) {
+    const dispatch = useDispatch()
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
-        console.log({
-            first_name: data.get('firstName'),
-            last_name: data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const dataForm = {
+            name: data.get('name'),
+            description: data.get('description'),
+        };
+        dispatch(createProductAction(dataForm))
     };
+
+    const history = useHistory()
+
+    useEffect(() => {
+        if (!!product)
+            history.push('/product')
+    }, [product])
 
     return <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -40,12 +47,11 @@ function ProductCreate() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                autoComplete="given-name"
-                                name="firstName"
+                                name="name"
                                 required
                                 fullWidth
-                                id="firstName"
-                                label="First Name"
+                                id="name"
+                                label="Nombre"
                                 autoFocus
                             />
                         </Grid>
@@ -53,31 +59,9 @@ function ProductCreate() {
                             <TextField
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="family-name"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="email"
-                                label="Email Address"
-                                name="email"
-                                autoComplete="email"
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="new-password"
+                                id="description"
+                                label="Descripcion"
+                                name="description"
                             />
                         </Grid>
                     </Grid>
@@ -95,4 +79,11 @@ function ProductCreate() {
     </ThemeProvider>
 }
 
-export default ProductCreate;
+
+function mapState(state) {
+    return {
+        product: state.product.product,
+    }
+}
+
+export default connect(mapState)(ProductCreate);

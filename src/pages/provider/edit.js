@@ -38,8 +38,8 @@ function ProviderEdit({provider, updateStatus}) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const dataForm = {
+            id,
             name: data.get('name'),
-            id: id,
             enrollment_date: provider.enrollment_date,
             direction: data.get('direction')
         };

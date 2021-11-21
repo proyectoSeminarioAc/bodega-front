@@ -52,7 +52,7 @@ function App() {
                                 <Route exact path="/move">
                                     <Move/>
                                 </Route>
-                                <Route path="/storage">
+                                <Route path="/storages">
                                     <Storage/>
                                 </Route>
                                 <Route exact path="/storage/create">

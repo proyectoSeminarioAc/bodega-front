@@ -1,30 +1,50 @@
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {useParams} from "react-router-dom";
+import {useHistory, useParams} from "react-router-dom";
+import {connect, useDispatch} from "react-redux";
+import {useEffect, useState} from "react";
+import {fetchStoreAction, updateStoreAction} from "../../redux/storeDuck";
+import {updateProviderAction} from "../../redux/providerDuck";
 
 const theme = createTheme();
 
-function StorageEdit() {
+function StorageEdit({store, updateStatus}) {
+    const dispatch = useDispatch()
     const {id} = useParams();
+    const [storageName, setStorageName] = useState()
+    const [storageDescription, setStorageDescription] = useState()
+    useEffect(() => {
+        dispatch(fetchStoreAction(id))
+    }, [])
+
+    const history = useHistory()
+
+    useEffect(() => {
+        if (!!store) {
+            setStorageName(store.name)
+            setStorageDescription(store.description)
+            if (updateStatus) {
+                history.push('/storages')
+            }
+        }
+    }, [store])
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        console.log({
-            first_name: data.get('firstName'),
-            last_name: data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const dataForm = {
+            id,
+            name: data.get('name'),
+            description: data.get('description'),
+        };
+        dispatch(updateStoreAction(dataForm, id))
     };
 
     return <ThemeProvider theme={theme}>
@@ -45,25 +65,25 @@ function StorageEdit() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                autoComplete="given-name"
-                                name="code"
+                                name="name"
                                 required
                                 fullWidth
-                                id="code"
-                                label="First Name"
+                                id="name"
+                                label="Nombre"
                                 autoFocus
-                                value="code"
+                                value={storageName}
+                                onChange={(e) => setStorageName(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="family-name"
-                                value="lastName"
+                                id="description"
+                                label="Descripcion"
+                                name="description"
+                                value={storageDescription}
+                                onChange={(e) => setStorageDescription(e.target.value)}
                             />
                         </Grid>
                     </Grid>
@@ -81,4 +101,11 @@ function StorageEdit() {
     </ThemeProvider>
 }
 
-export default StorageEdit;
+function mapState(state) {
+    return {
+        store: state.store.store,
+        updateStatus: state.store.updateStatus,
+    }
+}
+
+export default connect(mapState)(StorageEdit);

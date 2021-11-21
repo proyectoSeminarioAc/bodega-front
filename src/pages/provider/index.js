@@ -11,12 +11,11 @@ import {useHistory} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {deleteProviderAction, getProvidersAction} from "../../redux/providerDuck";
-import Skeleton from '@mui/material/Skeleton';
+import SkeletonListComponent from "../../components/SkeletonComponent";
 
 function Provider({providers, deleteStatus, fetching}) {
     const history = useHistory();
     const dispatch = useDispatch();
-    const skeletonArray = Array(10).fill('');
 
     useEffect(() => {
         dispatch(getProvidersAction())
@@ -46,26 +45,7 @@ function Provider({providers, deleteStatus, fetching}) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {fetching &&
-                        skeletonArray.map((item, index) => (
-                            <TableRow key={index}>
-                                <TableCell component="th" scope="row">
-                                    <Skeleton/>
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    <Skeleton/>
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    <Skeleton/>
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    <Skeleton/>
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    <Skeleton/>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        <SkeletonListComponent fetching={fetching}/>
                         {providers && providers.map((row) => (
                             <TableRow
                                 key={row.id}

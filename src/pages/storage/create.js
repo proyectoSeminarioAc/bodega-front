@@ -1,29 +1,39 @@
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {connect, useDispatch} from "react-redux";
+import {createStoreAction} from "../../redux/storeDuck";
+import {useEffect} from "react";
+import {useHistory} from "react-router-dom";
 
 const theme = createTheme();
 
-function StorageCreate() {
+function StorageCreate({store}) {
+    const dispatch = useDispatch()
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        console.log({
-            first_name: data.get('firstName'),
-            last_name: data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+        const dataForm = {
+            name: data.get('name'),
+            description: data.get('description'),
+        };
+
+        dispatch(createStoreAction(dataForm))
     };
+
+    const history = useHistory()
+
+    useEffect(() => {
+        if (!!store)
+            history.push('/storages')
+    }, [store])
 
     return <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -43,12 +53,11 @@ function StorageCreate() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                autoComplete="given-name"
-                                name="code"
+                                name="name"
                                 required
                                 fullWidth
-                                id="code"
-                                label="First Name"
+                                id="name"
+                                label="Nombre"
                                 autoFocus
                             />
                         </Grid>
@@ -56,10 +65,9 @@ function StorageCreate() {
                             <TextField
                                 required
                                 fullWidth
-                                id="lastName"
-                                label="Last Name"
-                                name="lastName"
-                                autoComplete="family-name"
+                                id="description"
+                                label="Descripcion"
+                                name="description"
                             />
                         </Grid>
                     </Grid>
@@ -77,4 +85,10 @@ function StorageCreate() {
     </ThemeProvider>
 }
 
-export default StorageCreate;
+function mapState(state) {
+    return {
+        store: state.store.store,
+    }
+}
+
+export default connect(mapState)(StorageCreate);

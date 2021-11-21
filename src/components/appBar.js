@@ -150,7 +150,7 @@ function PrimaryAppBar() {
                             <TransitEnterexitIcon onClick={() => history.push('/move')}/>
                         </IconButton>
                         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-                            <ConstructionIcon onClick={() => history.push('/storage')}/>
+                            <ConstructionIcon onClick={() => history.push('/storages')}/>
                         </IconButton>
                         <IconButton size="large" aria-label="show 17 new notifications" color="inherit">
                             <DetailsIcon onClick={() => history.push('/detail')}/>

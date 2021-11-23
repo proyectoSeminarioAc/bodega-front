@@ -13,10 +13,11 @@ import {connect, useDispatch} from "react-redux";
 import {getStoresAction} from "../../redux/storeDuck";
 import {getProductsAction} from "../../redux/productDuck";
 import {createDetailAction} from "../../redux/detailtDuck";
+import {useHistory} from "react-router-dom";
 
 const theme = createTheme();
 
-function DetailCreate({stores, products}) {
+function DetailCreate({detail, stores, products}) {
     const [productId, setProductId] = useState(0);
     const [storageId, setStorageId] = useState(0);
     const [quantityForm, setQuantityForm] = useState(0);
@@ -54,6 +55,12 @@ function DetailCreate({stores, products}) {
 
         dispatch(createDetailAction(dataForm))
     };
+    const history = useHistory();
+
+    useEffect(() => {
+        if (!!detail)
+            history.push('/detail')
+    }, [detail])
 
     return <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -152,6 +159,7 @@ function mapState(state) {
     return {
         stores: state.store.stores,
         products: state.product.products,
+        detail: state.detail.detail,
     }
 }
 

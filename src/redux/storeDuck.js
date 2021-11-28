@@ -32,7 +32,7 @@ const DELETING_STORE_SUCCESS = "DELETING_STORE_SUCCESS";
 const DELETING_STORE_ERROR = "DELETING_STORE_ERROR";
 
 
-export default function storeReducer(state = initialData, action) {
+export default function storeReducer(action, state = initialData) {
     switch (action.type) {
         case FETCHING_STORE:
         case FETCHING_STORES:

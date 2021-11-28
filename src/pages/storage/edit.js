@@ -10,7 +10,6 @@ import {useHistory, useParams} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
 import {useEffect, useState} from "react";
 import {fetchStoreAction, updateStoreAction} from "../../redux/storeDuck";
-import {updateProviderAction} from "../../redux/providerDuck";
 
 const theme = createTheme();
 

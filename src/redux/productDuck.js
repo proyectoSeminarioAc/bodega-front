@@ -32,7 +32,7 @@ const DELETING_PRODUCT_SUCCESS = "DELETING_PRODUCT_SUCCESS";
 const DELETING_PRODUCT_ERROR = "DELETING_PRODUCT_ERROR";
 
 
-export default function productReducer(state = initialData, action) {
+export default function productReducer(action, state = initialData) {
     switch (action.type) {
         case FETCHING_PRODUCT:
         case FETCHING_PRODUCTS:

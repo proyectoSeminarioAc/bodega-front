@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import {useHistory} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
-import SkeletonListComponent from "../../components/SkeletonComponent";
+import SkeletonListComponent from "../../components/SkeletonListComponent";
 import {useEffect} from "react";
 import {deleteStoreAction, getStoresAction} from "../../redux/storeDuck";
 

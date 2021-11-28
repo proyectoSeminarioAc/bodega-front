@@ -6,25 +6,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import {useHistory} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
 import {useEffect} from "react";
-import {deleteProviderAction, getProvidersAction} from "../../redux/providerDuck";
-import SkeletonListComponent from "../../components/SkeletonComponent";
+import SkeletonListComponent from "../../components/SkeletonListComponent";
 import {getDetailsAction} from "../../redux/detailtDuck";
-
-function createData(name, calories, fat, carbs, protein) {
-    return {name, calories, fat, carbs, protein};
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
 function Detail({details, deleteStatus, fetching}) {
     const history = useHistory();

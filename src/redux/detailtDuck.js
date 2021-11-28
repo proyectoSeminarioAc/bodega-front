@@ -32,7 +32,7 @@ const DELETING_DETAIL_SUCCESS = "DELETING_DETAIL_SUCCESS";
 const DELETING_DETAIL_ERROR = "DELETING_DETAIL_ERROR";
 
 
-export default function detailReducer(state = initialData, action) {
+export default function detailReducer(action, state = initialData) {
     switch (action.type) {
         case FETCHING_DETAIL:
         case FETCHING_DETAILS:

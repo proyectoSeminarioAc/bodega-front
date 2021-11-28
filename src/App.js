@@ -11,7 +11,7 @@ import Storage from "./pages/storage";
 import Detail from "./pages/detail";
 import Product from "./pages/product";
 import Move from "./pages/move";
-import PrimaryAppBar from "./components/appBar";
+import PrimaryAppBar from "./components/PrimaryAppBar";
 import {Box, Grid} from "@mui/material";
 import ProductCreate from "./pages/product/create";
 import ProductEdit from "./pages/product/edit";
@@ -20,7 +20,7 @@ import ProviderEdit from "./pages/provider/edit";
 import StorageCreate from "./pages/storage/create";
 import StorageEdit from "./pages/storage/edit";
 import DetailCreate from "./pages/detail/create";
-import DetailEdit from "./pages/detail/edit";
+import DetailEdit from "./pages/detail/DetailEdit";
 
 function App() {
     return (

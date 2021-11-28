@@ -32,7 +32,7 @@ const DELETING_PROVIDER_SUCCESS = "DELETING_PROVIDER_SUCCESS";
 const DELETING_PROVIDER_ERROR = "DELETING_PROVIDER_ERROR";
 
 
-export default function providerReducer(state = initialData, action) {
+export default function providerReducer(action, state = initialData) {
     switch (action.type) {
         case FETCHING_PROVIDER:
         case FETCHING_PROVIDERS:

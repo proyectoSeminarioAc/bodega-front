@@ -11,7 +11,7 @@ import {useHistory} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {deleteProviderAction, getProvidersAction} from "../../redux/providerDuck";
-import SkeletonListComponent from "../../components/SkeletonComponent";
+import SkeletonListComponent from "../../components/SkeletonListComponent";
 
 function Provider({providers, deleteStatus, fetching}) {
     const history = useHistory();

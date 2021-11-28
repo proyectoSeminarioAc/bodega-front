@@ -11,7 +11,7 @@ import Storage from "./pages/storage";
 import Detail from "./pages/detail";
 import Product from "./pages/product";
 import Move from "./pages/move";
-import PrimaryAppBar from "./components/appBar";
+import PrimaryAppBar from "./components/PrimaryAppBar";
 import {Box, Grid} from "@mui/material";
 import ProductCreate from "./pages/product/create";
 import ProductEdit from "./pages/product/edit";

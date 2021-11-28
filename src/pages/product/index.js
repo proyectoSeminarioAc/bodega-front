@@ -11,7 +11,7 @@ import {useHistory} from "react-router-dom";
 import {connect, useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {deleteProductAction, getProductsAction} from "../../redux/productDuck";
-import SkeletonListComponent from "../../components/SkeletonComponent";
+import SkeletonListComponent from "../../components/SkeletonListComponent";
 
 function createData(name, calories, fat, carbs, protein) {
     return {name, calories, fat, carbs, protein};

@@ -20,7 +20,7 @@ import ProviderEdit from "./pages/provider/edit";
 import StorageCreate from "./pages/storage/create";
 import StorageEdit from "./pages/storage/edit";
 import DetailCreate from "./pages/detail/create";
-import DetailEdit from "./pages/detail/edit";
+import DetailEdit from "./pages/detail/DetailEdit";
 
 function App() {
     return (
